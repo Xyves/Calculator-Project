@@ -1,14 +1,54 @@
-const numericButtons = document.getElementsByClassName("numeric-button");
-const backspace = document.querySelector(".backspace");
-const percentage = document.querySelector(".percentage");
-const dotButton = document.querySelector(".dot-button");
-const result = document.querySelector("#displayScreen");
-const operatorButtons = document.querySelectorAll(".operators");
-let zero = numericButtons[9];
-let eight = numericButtons[1];
-let nine = numericButtons[2];
+// Create numbers variables & other symbols
+let numericButtons = document.getElementsByClassName("numeric-button");
+const clearButton = document.querySelector(".clear");
+let backspace = document.querySelector(".backspace");
+let percentage = document.querySelector(".percentage");
+let dotButton = document.querySelector(".dot-button");
+let result = document.querySelector("#displayWindow");
+let operatorButtons = document.querySelectorAll(".operators");
+let num1, num2, operator;
 
-// Functions:
+// Save the buttons into an array
+let buttons = Array.from(document.getElementsByClassName("button"));
+
+clearButton.addEventListener("click", () => {
+  displayWindow.value = "";
+  num1 = undefined;
+  num2 = undefined;
+  operator = undefined;
+});
+// Print the button pressed
+buttons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    const buttonText = e.target.textContent.trim();
+
+    if (!isNaN(parseFloat(buttonText)) || buttonText === ".") {
+      if (typeof operator === "undefined") {
+        displayWindow.value += buttonText;
+      } else {
+        displayWindow.value += buttonText;
+        num2 = parseFloat(displayWindow.value);
+      }
+    } else if (button.classList.contains("operators")) {
+      operator = buttonText;
+      num1 = parseFloat(displayWindow.value);
+      displayWindow.value = "";
+    } else if (button.classList.contains("equal-button")) {
+      if (
+        typeof num1 !== "undefined" &&
+        typeof num2 !== "undefined" &&
+        typeof operator !== "undefined"
+      ) {
+        const resultValue = calculate();
+        displayWindow.value = resultValue;
+        num1 = resultValue;
+        num2 = undefined;
+        operator = undefined;
+      }
+    }
+  });
+});
+
 function calculate() {
   if (operator === "+") {
     return num1 + num2;
@@ -20,79 +60,34 @@ function calculate() {
     return num1 * num2;
   }
   if (operator === "/") {
-    return num1 / num2;
+    if (num2 === 0) {
+      return "Undefined";
+    } else {
+      return num1 / num2;
+    }
   }
   if (operator === "%") {
     return num1 % num2;
   }
+  return NaN;
 }
-function additionFunction() {
-  operator = "+";
-  if (num1 && num2 && operator) {
-    num1 = calculate();
-    num2 = undefined;
-  } else {
-    num1 = parseFloat(result.textContent);
-  }
-  result.textContent = "";
-  selectedOperator = undefined;
-};
 const subtractFunction = () => {
-  selectedOperator = "-";
+  operator = "-";
 };
 const multiplyFunction = () => {
-  selectedOperator = "X";
+  operator = "X";
 };
 const divideFunction = () => {
-  selectedOperator = "/";
+  operator = "/";
 };
+
+const divideButton = document.querySelector(".dividing");
+divideButton.addEventListener("click", divideFunction);
 const moduloFunction = () => {
-  selectedOperator = "%";
+  operator = "%";
 };
-const clearFunction = () => {
-  result.textContent = "0";
-  num1 = undefined;
-  num2 = undefined;
-  operator = undefined;
-};
+
 const backspaceFunction = () => {
   let currentResult = result.textContent.toString();
   result.textContent = currentResult.slice(0, -1);
 };
-function handleButtonClick(event) {
-  const selectedNumber = event.target.textContent;
-  if (typeof num1 === "undefined") {
-    num1 = parseFloat(selectedNumber.trim());
-  } else {
-    num2 = parseFloat(selectedNumber.trim());
-  }
-  result.textContent += selectedNumber.trim();
-}
-function handleOperatorClick(event) {
-  if (event.target.classList.contains("operators")) {
-    selectedOperator = event.target.textContent;
-  }
-}
-
-// Create mathematical operators variables
-let addition = document.querySelector(".addition");
-let multiplication = document.querySelector(".multiplication");
-let division = document.querySelector(".dividing");
-let equalButton = document.querySelector(".equal-button");
-let subtraction = document.querySelector(".subtraction");
-let clear = document.querySelector(".clear");
-
-multiplication.addEventListener("click", multiplyFunction);
-subtraction.addEventListener("click", subtractFunction);
-division.addEventListener("click", divideFunction);
-addition.addEventListener("click", additionFunction);
-backspace.addEventListener("click", backspaceFunction);
-clear.addEventListener("click", clearFunction);
-one.addEventListener("click", handleButtonClick);
-seven.addEventListener("click", handleButtonClick);
-eight.addEventListener("click", handleButtonClick);
-nine.addEventListener("click", handleButtonClick);
-zero.addEventListener("click", handleButtonClick);
-operatorButtons.forEach((operatorButton) => {
-  operatorButton.addEventListener("click", handleOperatorClick);
-});
