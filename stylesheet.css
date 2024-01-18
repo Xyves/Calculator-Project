@@ -1,0 +1,57 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  background-color: #1b040456;
+  overflow: hidden;
+}
+#container-calc {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 560px;
+  height: 700px;
+  background-image: url(img/lava-656827_1280.jpg);
+  margin: auto;
+  margin-top: 2rem;
+  border: 2px solid black;
+}
+.displayPanel {
+  width: 85%;
+  height: 15%;
+  margin-top: 10%;
+  background-color: yellow;
+}
+#buttons {
+  display: flex;
+	@@ -31,7 +31,7 @@ body {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 13px;
+  margin: 20% auto;
+  width: 75%;
+  height: 55%;
+  vertical-align: middle;
+	@@ -41,10 +41,16 @@ body {
+  flex-grow: 1;
+  width: calc(560px * 0.8 / 6);
+  height: 60px;
+  background-color: rgb(255, 255, 255);
+  border-style: solid;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  user-select: none;
+}
+.button:active {
+  background-color: rgb(202, 202, 202);
+}
+.backspace {
+  background-image: url(img/backspace.png);
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
