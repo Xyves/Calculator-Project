@@ -3,8 +3,9 @@ html {
 }
 body {
   height: 100%;
-  background-color: #633a3a56;
+  background-color: #260f0f;
   overflow: hidden;
+  
 }
 h1 {
   text-align: center;
@@ -71,8 +72,10 @@ h1 {
   height: 50%;
   margin: 0 auto;
   padding: 15px 0;
-  background-color: black;
+  background-color: white;
   color: white;
   pointer-events: none;
   font-size: 20px;
+  color:black;
+  
 }
