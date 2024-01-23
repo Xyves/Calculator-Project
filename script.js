@@ -1,5 +1,5 @@
 // Create numbers variables & other symbols
-let numericButtons = document.getElementsByClassName("numeric-button");
+let numericButtons = document.querySelectorAll(".numeric-button");
 const clearButton = document.querySelector(".clear");
 let backspace = document.querySelector(".backspace");
 let percentage = document.querySelector(".percentage");
@@ -9,7 +9,13 @@ let operatorButtons = document.querySelectorAll(".operators");
 let num1, num2, operator;
 
 // Save the buttons into an array
-let buttons = Array.from(document.getElementsByClassName("button"));
+let buttons = Array.from(document.querySelectorAll(".button"));
+
+function playMusic(){
+  let audio =  new Audio("audio.mp3");
+  audio.volume = 0.07;
+  audio.play();
+  }
 
 clearButton.addEventListener("click", () => {
   displayWindow.value = "";
@@ -17,19 +23,32 @@ clearButton.addEventListener("click", () => {
   num2 = undefined;
   operator = undefined;
 });
-// Print the button pressed
+
+// Calculator logic
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
-    const buttonText = e.target.textContent.trim();
-
-    if (!isNaN(parseFloat(buttonText)) || buttonText === ".") {
-      if (typeof operator === "undefined") {
+    let buttonText = e.target.textContent.trim();
+    playMusic()
+    
+    if (buttonText == "."){
+      if(!displayWindow.value.includes('.') && displayWindow.value.length) {
+      displayWindow.value += buttonText;
+      }
+    }
+    if(button.classList.contains("backspace")){
+      let currentResult = displayWindow.value.toString();
+      displayWindow.value = currentResult.slice(0, -1);
+    }
+    else if (!isNaN(parseFloat(buttonText))){
+      // For more than one decimal don't do anything. Return
+       if (typeof operator === "undefined") {
         displayWindow.value += buttonText;
       } else {
         displayWindow.value += buttonText;
         num2 = parseFloat(displayWindow.value);
       }
-    } else if (button.classList.contains("operators")) {
+    }
+     if (button.classList.contains("operators")) {
       operator = buttonText;
       num1 = parseFloat(displayWindow.value);
       displayWindow.value = "";
@@ -39,15 +58,16 @@ buttons.forEach((button) => {
         typeof num2 !== "undefined" &&
         typeof operator !== "undefined"
       ) {
-        const resultValue = calculate();
-        displayWindow.value = resultValue;
-        num1 = resultValue;
-        num2 = undefined;
-        operator = undefined;
-      }
-    }
-  });
-});
+          const resultValue = calculate();
+          displayWindow.value = resultValue;
+          displayWindow.textContent = resultValue
+          num1 = resultValue;
+          num2 = undefined;
+          operator = undefined;
+      }}
+    
+  })
+})
 
 function calculate() {
   if (operator === "+") {
@@ -60,6 +80,7 @@ function calculate() {
     return num1 * num2;
   }
   if (operator === "/") {
+    console.log("Hey")
     if (num2 === 0) {
       return "Undefined";
     } else {
@@ -71,6 +92,7 @@ function calculate() {
   }
   return NaN;
 }
+
 const subtractFunction = () => {
   operator = "-";
 };
@@ -81,13 +103,6 @@ const divideFunction = () => {
   operator = "/";
 };
 
-const divideButton = document.querySelector(".dividing");
-divideButton.addEventListener("click", divideFunction);
 const moduloFunction = () => {
   operator = "%";
-};
-
-const backspaceFunction = () => {
-  let currentResult = result.textContent.toString();
-  result.textContent = currentResult.slice(0, -1);
 };
